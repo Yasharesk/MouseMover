@@ -1,8 +1,9 @@
 from threading import Thread
 import logging
+import threading
 import tkinter as tk
 from tkinter import ttk
-import time
+from time import sleep
 from random import randint, choice
 import pyautogui as pg
 import configparser
@@ -29,7 +30,7 @@ def move():
         max_y = pg.size().height
         """Wait for a random amount of time before each move"""
         logger.debug('Going to sleep')
-        time.sleep(sleep_time := randint(min_sleep, max_sleep))
+        sleep(sleep_time := randint(min_sleep, max_sleep))
         logger.debug(f'{sleep_time=}')
         '''Set the amount of thime the cursor movement will take'''
         lag = randint(min_lag, max_lag)
@@ -54,8 +55,12 @@ def stop_thread():
     '''Change the state of the program to paused'''
     global pause_flag
     pause_flag = True
-    start_button['state'] = 'normal'
     pause_button['state'] = 'disabled'
+    '''Safety measure to keep accidentally creating too many threads by puase/unpausing in rapid succession'''
+    while threading.active_count() > 3:
+        logger.info(f'More than 3 threads are active, going to sleep for {max_sleep} seconds')
+        sleep(max_sleep)
+    start_button['state'] = 'normal'
 
 
 '''Set up the GUI window'''
