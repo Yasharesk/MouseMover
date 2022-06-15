@@ -3,7 +3,6 @@
 Simply as the name suggests, this script moves the mouse around in random intervals to random points of the screen to keep your screen active.  
 This has been just a practice for creating a separate thread for handling the movement loop alongside the main loop of the GUI on the Move.py
 
-
 ### Movebase.py
 This is simple script to be ran with Python. It only requires the __pyautogui__ package installed.
 
@@ -15,3 +14,4 @@ pyinstaller Move.py --noconsole
 
 Some minor customizaitons on window size, time interval limits between moves and so on can be acheived by editing the config.ini file. 
 
+**Currently pausing/starting creates multiple threads and will cause problems if not checked. A primitive fail-safe is added for over 3 threads, which halts the program until at least one thread is done.**
